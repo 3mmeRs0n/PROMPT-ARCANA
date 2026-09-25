@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Arcana - O Jogo da Memória Místico inspirado nas cartas do Tarô. Um ritual elegante de símbolos alquímicos, astrológicos e mistério.">
+  <meta name="keywords" content="Tarô, Jogo da Memória, Arcana, Dark Fantasy, Ocultismo, Alquimia, Cartas">
+  <meta name="author" content="Arcana Tarot Memory">
+  <title>ARCANA ✧ O Jogo da Memória do Tarô</title>
+
+  <!-- Google Fonts: Cinzel, Cinzel Decorative e Cormorant Garamond -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Fundo Cósmico Animado: Canvas com partículas e poeira estelar -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Círculos Mágicos e Mandalas Sutis em Segundo Plano -->
+  <div class="mystic-overlay" aria-hidden="true">
+    <div class="magic-circle circle-outer"></div>
+    <div class="magic-circle circle-middle"></div>
+    <div class="magic-circle circle-inner"></div>
+    <div class="mandala-bg"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <!-- Contêiner Principal da Aplicação -->
+  <div id="app" class="app-container">
+
+    <!-- ==================== TELA 1: MENU PRINCIPAL ==================== -->
+    <main id="screen-menu" class="screen screen-active" role="main" aria-label="Menu Principal">
+      <div class="menu-content">
+        <!-- Ornamento do Topo -->
+        <div class="ornament-top" aria-hidden="true">
+          <span class="star-accent">✦</span>
+          <span class="ornament-line"></span>
+          <span class="moon-icon">☾</span>
+          <span class="ornament-line"></span>
+          <span class="star-accent">✦</span>
+        </div>
+
+        <!-- Título Principal -->
+        <header class="menu-header">
+          <h1 class="arcana-title">ARCANA</h1>
+          <p class="arcana-subtitle">O JOGO DA MEMÓRIA</p>
+        </header>
+
+        <!-- Símbolo Central: Mandala e Lua Dourada -->
+        <div class="menu-sigil-wrapper" aria-hidden="true">
+          <div class="sigil-glow"></div>
+          <svg class="sigil-mandala" viewBox="0 0 200 200" width="160" height="160">
+            <defs>
+              <linearGradient id="goldGradMenu" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#F5D76E" />
+                <stop offset="50%" stop-color="#D4AF37" />
+                <stop offset="100%" stop-color="#A98224" />
+              </linearGradient>
+            </defs>
+            <!-- Círculos Concêntricos -->
+            <circle cx="100" cy="100" r="92" fill="none" stroke="url(#goldGradMenu)" stroke-width="1.2" stroke-dasharray="3,3" opacity="0.6"/>
+            <circle cx="100" cy="100" r="82" fill="none" stroke="url(#goldGradMenu)" stroke-width="1.5" opacity="0.8"/>
+            <circle cx="100" cy="100" r="66" fill="none" stroke="url(#goldGradMenu)" stroke-width="1" opacity="0.5"/>
+            <!-- Estrela de 8 pontas entrelaçada -->
+            <polygon points="100,20 120,70 175,75 130,110 145,165 100,135 55,165 70,110 25,75 80,70" fill="none" stroke="url(#goldGradMenu)" stroke-width="1.2" opacity="0.7"/>
+            <polygon points="100,28 116,68 160,72 124,100 136,144 100,120 64,144 76,100 40,72 84,68" fill="none" stroke="url(#goldGradMenu)" stroke-width="0.8" opacity="0.5"/>
+            <!-- Lua Crescente Central -->
+            <path d="M100,50 A50,50 0 1,0 135,120 A42,42 0 1,1 100,50 Z" fill="url(#goldGradMenu)" opacity="0.85"/>
+            <!-- Pequena estrela mística interior -->
+            <polygon points="112,82 115,90 123,93 115,96 112,104 109,96 101,93 109,90" fill="#F5D76E"/>
+            <circle cx="100" cy="100" r="4" fill="#F5D76E" opacity="0.9"/>
+          </svg>
+        </div>
+
+        <p class="menu-invocation">
+          Desvele os véus do destino através dos 22 Arcanos Maiores.
+        </p>
+
+        <!-- ==================== SEÇÃO PRINCIPAL: CAMINHO DOS ARCANA ==================== -->
+        <section class="menu-path-section" aria-label="Caminho dos Arcana">
+          <div class="path-section-header">
+            <span class="path-section-eyebrow">PROGRESSÃO SAGRADA</span>
+            <h2 class="path-section-title">CAMINHO DOS ARCANA</h2>
+            <p class="path-section-subtitle">Toque em qualquer Arcano revelado para iniciar o ritual</p>
+          </div>
+
+          <!-- Trilha Mística Conectada por Linhas Douradas -->
+          <div class="constellation-wrapper">
+            <div class="constellation-celestial-ends" aria-hidden="true">
+              <span class="constellation-icon moon-start">☽</span>
+              <span class="constellation-line-connector"></span>
+              <span class="constellation-icon sun-end">☀</span>
+            </div>
+
+            <div id="path-nodes-container" class="path-nodes-list" role="list" aria-label="Fases da Jornada">
+              <!-- As 7 fases serão injetadas dinamicamente pelo script.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Botões de Ação do Menu -->
+        <nav class="menu-nav" aria-label="Navegação do Menu">
+          <button id="btn-start-game" class="arcana-btn arcana-btn-primary" type="button">
+            <span class="btn-border-corner top-left"></span>
+            <span class="btn-border-corner top-right"></span>
+            <span class="btn-border-corner bottom-left"></span>
+            <span class="btn-border-corner bottom-right"></span>
+            <span class="btn-icon">✧</span>
+            <span class="btn-text" id="btn-start-text">JOGAR FASE ATUAL</span>
+            <span class="btn-icon">✧</span>
+          </button>
+
+          <button id="btn-open-arcanos" class="arcana-btn" type="button">
+            <span class="btn-border-corner top-left"></span>
+            <span class="btn-border-corner top-right"></span>
+            <span class="btn-border-corner bottom-left"></span>
+            <span class="btn-border-corner bottom-right"></span>
+            <span class="btn-icon">☾</span>
+            <span class="btn-text">LIVRO DOS 22 ARCANOS</span>
+            <span class="btn-icon">☾</span>
+          </button>
+
+          <button id="btn-open-settings" class="arcana-btn" type="button">
+            <span class="btn-border-corner top-left"></span>
+            <span class="btn-border-corner top-right"></span>
+            <span class="btn-border-corner bottom-left"></span>
+            <span class="btn-border-corner bottom-right"></span>
+            <span class="btn-icon">⚙</span>
+            <span class="btn-text">CONFIGURAÇÕES</span>
+            <span class="btn-icon">⚙</span>
+          </button>
+        </nav>
+
+        <!-- Rodapé do Menu -->
+        <footer class="menu-footer">
+          <span>Ocultismo Elegante ✦ Alquimia ✦ Astrologia ✦ 22 Arcanos Maiores</span>
+        </footer>
+      </div>
+    </main>
+
+    <!-- ==================== TELA 2: TABULEIRO DO JOGO ==================== -->
+    <section id="screen-game" class="screen" aria-label="Mesa de Tarô" style="display: none;">
+      <!-- Barra Superior / HUD do Jogo -->
+      <header class="game-hud">
+        <!-- Logo / Marca à Esquerda -->
+        <div class="hud-brand">
+          <div class="hud-title-wrap">
+            <span class="hud-symbol">✧</span>
+            <div class="hud-phase-info">
+              <h2 class="hud-title">ARCANA</h2>
+              <span id="hud-phase-name" class="hud-phase-badge">Fase 1: O Despertar</span>
+            </div>
+            <span class="hud-symbol">✧</span>
+          </div>
+        </div>
+
+        <!-- Indicadores / Contadores ao Centro -->
+        <div class="hud-stats" role="status" aria-live="polite">
+          <div class="stat-box" id="stat-moves-box">
+            <span class="stat-label">Movimentos</span>
+            <span id="stat-moves" class="stat-value">0</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true">✦</div>
+          <div class="stat-box" id="stat-errors-box">
+            <span class="stat-label">Erros</span>
+            <span id="stat-errors" class="stat-value">0</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true">✦</div>
+          <div class="stat-box" id="stat-pairs-box">
+            <span class="stat-label">Pares</span>
+            <span id="stat-pairs" class="stat-value">0/6</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true">✦</div>
+          <div class="stat-box" id="stat-timer-box">
+            <span id="stat-timer-label" class="stat-label">Tempo</span>
+            <span id="stat-time" class="stat-value">00:00</span>
+          </div>
+        </div>
+
+        <!-- Ações do HUD à Direita (Voltar / Reiniciar / Som) -->
+        <div class="hud-actions">
+          <button id="btn-sound-toggle" class="hud-icon-btn" type="button" aria-label="Alternar Sons" title="Ativar/Desativar Som">
+            <span id="sound-icon">🔊</span>
+          </button>
+          <button id="btn-restart-game" class="hud-btn" type="button" aria-label="Reiniciar Partida">
+            <span>REINICIAR</span>
+          </button>
+          <button id="btn-hud-back" class="hud-btn hud-btn-back" type="button" aria-label="Voltar ao Caminho dos Arcana">
+            <span class="hud-btn-icon">‹</span>
+            <span>VOLTAR</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Mensagem Eférea de Notificação / Dicas -->
+      <div id="game-toast" class="game-toast" role="alert" aria-live="assertive" aria-hidden="true"></div>
+
+      <!-- Tabuleiro das Cartas (Grid Responsivo com auto-fit dinâmico) -->
+      <div class="board-container" id="board-container">
+        <div id="card-board" class="card-grid" role="grid" aria-label="Tabuleiro das cartas do Tarô">
+          <!-- As cartas serão injetadas dinamicamente pelo script.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODAL DE VITÓRIA / FASE CONCLUÍDA ==================== -->
+    <div id="modal-victory" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="victory-title" style="display: none;">
+      <div class="modal-card victory-card">
+        <!-- Fundo de mandala giratória dourada -->
+        <div class="victory-mandala-bg" aria-hidden="true"></div>
+
+        <div class="modal-inner">
+          <div class="ornament-top" aria-hidden="true">
+            <span class="star-accent">✦</span>
+            <span class="ornament-line"></span>
+            <span class="moon-icon">☾</span>
+            <span class="ornament-line"></span>
+            <span class="star-accent">✦</span>
+          </div>
+
+          <p id="victory-eyebrow" class="victory-eyebrow">FASE CONCLUÍDA</p>
+          <h2 id="victory-title" class="victory-title">RITUAL CONSUMADO</h2>
+          
+          <!-- Avaliação em Estrelas (★ ★ ★) -->
+          <div class="victory-stars-wrapper" id="victory-stars-container" aria-label="Avaliação em estrelas">
+            <span class="star-badge" id="v-star-1">★</span>
+            <span class="star-badge" id="v-star-2">★</span>
+            <span class="star-badge" id="v-star-3">★</span>
+          </div>
+
+          <p id="victory-rank" class="victory-rank">
+            ✦ Oráculo Supremo dos Mistérios ✦
+          </p>
+
+          <!-- Resumo das Estatísticas -->
+          <div class="victory-stats-grid">
+            <div class="victory-stat-item">
+              <span class="vstat-icon">⏱</span>
+              <span class="vstat-label">Tempo</span>
+              <span id="vstat-time" class="vstat-number">00:00</span>
+            </div>
+            <div class="victory-stat-item">
+              <span class="vstat-icon">⚖</span>
+              <span class="vstat-label">Movimentos</span>
+              <span id="vstat-moves" class="vstat-number">0</span>
+            </div>
+            <div class="victory-stat-item">
+              <span class="vstat-icon">✗</span>
+              <span class="vstat-label">Erros</span>
+              <span id="vstat-errors" class="vstat-number">0</span>
+            </div>
+            <div class="victory-stat-item">
+              <span class="vstat-icon">✧</span>
+              <span class="vstat-label">Pares Revelados</span>
+              <span id="vstat-pairs" class="vstat-number">6/6</span>
+            </div>
+          </div>
+
+          <!-- Critérios / Dica de Desempenho -->
+          <p id="victory-criteria-hint" class="victory-criteria-hint">
+            3 Estrelas: Conclua em até 10 movimentos e menos de 45 segundos.
+          </p>
+
+          <!-- Botões de Ação da Vitória -->
+          <div class="victory-actions">
+            <button id="btn-victory-next-phase" class="arcana-btn arcana-btn-primary" type="button">
+              <span class="btn-border-corner top-left"></span>
+              <span class="btn-border-corner top-right"></span>
+              <span class="btn-border-corner bottom-left"></span>
+              <span class="btn-border-corner bottom-right"></span>
+              <span class="btn-icon">✧</span>
+              <span class="btn-text" id="btn-victory-next-text">PRÓXIMO ARCANO</span>
+              <span class="btn-icon">✧</span>
+            </button>
+
+            <button id="btn-victory-replay" class="arcana-btn" type="button">
+              <span class="btn-border-corner top-left"></span>
+              <span class="btn-border-corner top-right"></span>
+              <span class="btn-border-corner bottom-left"></span>
+              <span class="btn-border-corner bottom-right"></span>
+              <span class="btn-icon">↺</span>
+              <span class="btn-text">REPETIR FASE</span>
+              <span class="btn-icon">↺</span>
+            </button>
+
+            <button id="btn-victory-menu" class="arcana-btn" type="button">
+              <span class="btn-border-corner top-left"></span>
+              <span class="btn-border-corner top-right"></span>
+              <span class="btn-border-corner bottom-left"></span>
+              <span class="btn-border-corner bottom-right"></span>
+              <span class="btn-icon">◈</span>
+              <span class="btn-text">CAMINHO DOS ARCANA</span>
+              <span class="btn-icon">◈</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL DE PROGRESSÃO: ARCANO REVELADO ==================== -->
+    <div id="modal-unlock" class="modal-backdrop unlock-backdrop" role="dialog" aria-modal="true" aria-labelledby="unlock-title" style="display: none;">
+      <div class="unlock-glow-aura" aria-hidden="true"></div>
+      <div class="modal-card unlock-card">
+        <div class="unlock-inner">
+          <p class="unlock-eyebrow">O VÉU SE ABRIU</p>
+          <h2 id="unlock-title" class="unlock-title">ARCANO REVELADO</h2>
+
+          <!-- Carta de Tarô 3D com Giro e Brilho -->
+          <div class="unlock-card-showcase">
+            <div id="unlock-card-3d" class="unlock-card-3d">
+              <div class="unlock-card-face unlock-card-front" id="unlock-card-face">
+                <!-- SVG do Arcano inserido dinamicamente -->
+              </div>
+            </div>
+            <div class="unlock-shine-ray" aria-hidden="true"></div>
+          </div>
+
+          <h3 id="unlock-arcana-name" class="unlock-arcana-name">OS ENAMORADOS</h3>
+          <p id="unlock-arcana-lore" class="unlock-arcana-lore">
+            Uma nova força sagrada foi desperta em seu caminho iniciático.
+          </p>
+          <div id="unlock-phase-badge" class="unlock-phase-badge">
+            FASE 2 DESBLOQUEADA: O VÉU (8 PARES)
+          </div>
+
+          <button id="btn-unlock-continue" class="arcana-btn arcana-btn-primary unlock-btn" type="button">
+            <span class="btn-icon">✧</span>
+            <span class="btn-text">CONTINUAR</span>
+            <span class="btn-icon">✧</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL DE TEMPO ESGOTADO ==================== -->
+    <div id="modal-gameover" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="gameover-title" style="display: none;">
+      <div class="modal-card gameover-card">
+        <div class="modal-inner">
+          <p class="victory-eyebrow">TEMPO ESGOTADO</p>
+          <h2 id="gameover-title" class="victory-title">O VÉU SE FECHOU</h2>
+          <p class="gameover-desc">
+            As brumas do tempo envolveram as cartas antes que todas as correspondências fossem seladas.
+          </p>
+
+          <div class="gameover-actions">
+            <button id="btn-gameover-retry" class="arcana-btn arcana-btn-primary" type="button">
+              <span class="btn-icon">↺</span>
+              <span class="btn-text">TENTAR NOVAMENTE</span>
+              <span class="btn-icon">↺</span>
+            </button>
+            <button id="btn-gameover-path" class="arcana-btn" type="button">
+              <span class="btn-icon">◈</span>
+              <span class="btn-text">CAMINHO DOS ARCANA</span>
+              <span class="btn-icon">◈</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: ARCANOS (LORE & GALERIA) ==================== -->
+    <div id="modal-arcanos" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="arcanos-modal-title" style="display: none;">
+      <div class="modal-card arcanos-gallery-card">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="star-accent">✧</span>
+            <h2 id="arcanos-modal-title" class="modal-title">LIVRO DOS ARCANOS</h2>
+            <span class="star-accent">✧</span>
+          </div>
+          <button id="btn-close-arcanos" class="modal-close-btn" type="button" aria-label="Fechar Galeria de Arcanos">✕</button>
+        </header>
+
+        <p class="modal-subtitle">Conheça as forças esotéricas que guiam a sua jornada através das cartas.</p>
+
+        <div id="arcanos-list" class="arcanos-grid">
+          <!-- Os 6 Arcanos com suas descrições místicas e artes serão populados pelo script.js -->
+        </div>
+
+        <footer class="modal-footer">
+          <button id="btn-arcanos-back" class="arcana-btn" type="button">
+            <span class="btn-text">FECHAR LIVRO</span>
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- ==================== MODAL: CONFIGURAÇÕES ==================== -->
+    <div id="modal-settings" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title" style="display: none;">
+      <div class="modal-card settings-card">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="star-accent">✧</span>
+            <h2 id="settings-modal-title" class="modal-title">CONFIGURAÇÕES</h2>
+            <span class="star-accent">✧</span>
+          </div>
+          <button id="btn-close-settings" class="modal-close-btn" type="button" aria-label="Fechar Configurações">✕</button>
+        </header>
+
+        <div class="settings-content">
+          <!-- Configuração de Efeitos Sonoros -->
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Efeitos Sonoros Místicos</span>
+              <span class="setting-desc">Sons etéreos de virada de cartas, sinos celestiais e fanfarras sintetizadas.</span>
+            </div>
+            <label class="arcana-switch">
+              <input id="setting-sound" type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <!-- Configuração de Partículas Estelares -->
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-name">Partículas e Poeira Cósmica</span>
+              <span class="setting-desc">Partículas douradas e nebulosa animada em segundo plano.</span>
+            </div>
+            <label class="arcana-switch">
+              <input id="setting-particles" type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <!-- Estatísticas / Recordes -->
+          <div class="setting-stats-section">
+            <h3 class="setting-subhead">Melhores Rituais</h3>
+            <div class="best-records-row">
+              <div class="record-box">
+                <span class="record-label">Melhor Tempo</span>
+                <span id="best-time-val" class="record-value">--:--</span>
+              </div>
+              <div class="record-box">
+                <span class="record-label">Menor Qtd. Movimentos</span>
+                <span id="best-moves-val" class="record-value">--</span>
+              </div>
+              <div class="record-box">
+                <span class="record-label">Rituais Concluídos</span>
+                <span id="total-games-val" class="record-value">0</span>
+              </div>
+            </div>
+            <button id="btn-reset-records" class="hud-btn reset-records-btn" type="button">
+              Limpar Recordes
+            </button>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <button id="btn-settings-close" class="arcana-btn" type="button">
+            <span class="btn-text">SALVAR E RETORNAR</span>
+          </button>
+        </footer>
+      </div>
+    </div>
+
+  </div> <!-- Fim app-container -->
+
+  <!-- Templates de SVGs Reutilizáveis e Ilustrações dos Arcanos -->
+  <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- Gradientes Dourados Compartilhados -->
+      <linearGradient id="goldLinear" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#F5D76E" />
+        <stop offset="45%" stop-color="#D4AF37" />
+        <stop offset="100%" stop-color="#A98224" />
+      </linearGradient>
+
+      <linearGradient id="goldLinearV" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#F5D76E" />
+        <stop offset="30%" stop-color="#D4AF37" />
+        <stop offset="70%" stop-color="#A98224" />
+        <stop offset="100%" stop-color="#5E430B" />
+      </linearGradient>
+
+      <radialGradient id="goldRadial" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#F5D76E" stop-opacity="0.9"/>
+        <stop offset="50%" stop-color="#D4AF37" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#A98224" stop-opacity="0.1"/>
+      </radialGradient>
+
+      <radialGradient id="cardGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#4B2378" stop-opacity="0.6"/>
+        <stop offset="60%" stop-color="#160B29" stop-opacity="0.8"/>
+        <stop offset="100%" stop-color="#0B0614" stop-opacity="0.95"/>
+      </radialGradient>
+
+      <radialGradient id="parchmentGlow" cx="50%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#2a1645" stop-opacity="0.95"/>
+        <stop offset="60%" stop-color="#160B29" stop-opacity="0.98"/>
+        <stop offset="100%" stop-color="#0B0614" stop-opacity="1"/>
+      </radialGradient>
+
+      <!-- Ornamento de Canto Barroco/Tarot (Usado nos 4 cantos das cartas) -->
+      <g id="cornerOrnament">
+        <path d="M0,0 L20,0 C12,0 0,12 0,20 Z" fill="url(#goldLinear)" opacity="0.8"/>
+        <path d="M4,4 L16,4 C11,4 4,11 4,16 Z" fill="none" stroke="url(#goldLinear)" stroke-width="0.8"/>
+        <circle cx="6" cy="6" r="1.5" fill="#F5D76E"/>
+        <path d="M2,18 C6,14 14,6 18,2" fill="none" stroke="url(#goldLinear)" stroke-width="0.6"/>
+      </g>
+    </defs>
+  </svg>
+
+  <script src="script.js"></script>
+</body>
+</html>
